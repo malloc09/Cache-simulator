@@ -40,5 +40,5 @@ int main(){
 	for(i=0; i<count; i++){
 		printf("%c %d %c %d\n", a[i].A[0], a[i].B[0], a[i].A[1], a[i].B[1]);
 	}
-	printf("%d\n", count);
+	printf("foot print : %d cache size : %d\n", count,count/2);
 }
