@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+#define INCL 0
+#define EXCL 1
+
 struct input{
 	char A[2];
 	int B[2];
@@ -19,8 +22,13 @@ int main(){
 	while(!feof(fp)){
 		fscanf(fp, "%c %d %c %d\n", &tt1, &t1, &tt2, &t2);
 		for(i=0; i<count; i++){
-			if(t1 == a[i].B[0] && tt1 == a[i].A[0]){	//INCLUDE READ/WRITE
-			//if(t1 == a[i].B[0]){	//EXCEPT READ/WRITE
+			#if INCL
+			if(t1 == a[i].B[0] && tt1 == a[i].A[0])
+			#endif
+			#if EXCL
+			if(t1 == a[i].B[0])
+			#endif
+			{
 				tag=1;
 				break;
 			}
