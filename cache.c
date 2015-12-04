@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <time.h>
 #include "cache.h"
-
+#include "ds.h"
 mal_mem MEM[584];
 int pos;
 int T;
+
 
 int mem_access(int no, char mode){
 	if(pos==584){
 		printf("MEM FULL\n");
 		pos++;
 	}
-	struct timespec req = {0, 100};
+	struct timespec req = {0, MEMACC};
 	nanosleep(&req, NULL);
 	int i;
 	char tag=0;
@@ -30,7 +31,7 @@ int mem_access(int no, char mode){
 }
 
 int stor_access(int no){
-	struct timespec req = {0, 10000000};
+	struct timespec req = {0, HDDACC};
 	nanosleep(&req, NULL);
 	printf("%dACC\n", pos);
 	return 0;
@@ -42,7 +43,7 @@ int main(){
 	char mode;
 	int pageno;
 	int garbage;
-	
+	initDS();
 	FILE *fp = fopen("input.txt", "r");
 	S=clock();
 	while(!feof(fp)){
