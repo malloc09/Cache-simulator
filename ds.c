@@ -26,13 +26,11 @@ int enque(mal_mem data){
 
 
 /*deque data*/
-mal_mem deque(){
-	mal_mem res;
+int deque(){
 	if(front==rear)
-		return ;
+		return 0;
 	front=(front+1)%MAXQ;
-	res=queue[front];
-	return res;
+	return 1;
 }
 
 /* heap rebuilding after insertion*/
@@ -88,12 +86,10 @@ int enheap(mal_mem data){
 }
 
 /*delete data from heap*/
-mal_mem deheap(){
-	mal_mem res;
+int deheap(){
 	if(heapend==1)
-		return ;
-	res= heap[1];
+		return 0;
 	heap[1]=heap[--heapend];
 	heapdown();
-	return res;
+	return 1;
 }

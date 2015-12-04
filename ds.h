@@ -13,9 +13,9 @@ extern int heapend;
 
 void initDS();
 int enque(mal_mem data);
-mal_mem deque();
+int deque();
 int enheap(mal_mem data);
-mal_mem deheap();
+int deheap();
 
 
 #endif
