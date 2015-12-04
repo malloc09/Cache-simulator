@@ -8,20 +8,77 @@ int heapend=1; //for heap first empty space
 mal_memp queue;
 mal_memp	heap;
 
+void initQ(){
+	queue=(mal_memp)malloc(sizeof(mal_mem)*MAXQ);
+	rear=0;
+	front=0;
+}
+void desQ(){
+	if(queue!=NULL){
+		free(queue);
+		queue=NULL;
+	}
+}
 
-/*init Q & heap*/
-void initDS(){
-queue=(mal_memp)malloc(sizeof(mal_mem)*MAXQ);
-heap=(mal_memp)malloc(sizeof(mal_mem)*MAXH);
+void initH(){
+	heap=(mal_memp)malloc(sizeof(mal_mem)*MAXH);
+	heapend=0;
+}
+void desH(){
+	if(heap!=NULL){
+		free(heap);
+		heap=NULL;
+	}
+}
+int is_existQ(mal_mem data){
+	int pageno=data.page_num;
+	int i;
+
+	for(i=front;i!=rear;i=(i+1)%MAXQ){
+		if(pageno==queue[i].page_num)
+			return i;
+	}
+	return -1;
+}
+
+int is_existH(mal_mem data){
+	int pageno=data.page_num;
+	int i;
+	printf("EXIST!\n");
+	for(i=1;i<heapend;i++){
+		if(pageno==heap[i].page_num)
+			return i;
+	}
+	return -1;
+}
+
+
+int is_fullQ(){
+ if(front==(rear+1)%MAXQ){
+		printf("fuill\n");
+	 return 1;
+ }
+ else
+	 return 0;
+}
+
+int is_fullH(){
+	printf("FULLcheck!\n");
+	if(heapend-1==MAXH)
+		return 1;
+	else
+		return 0;
 }
 
 /*enque data*/
 int enque(mal_mem data){
+	if(!is_fullQ()){
 	rear=(rear+1)%MAXQ;
-	if(front+1==rear)
-		return 0;
 	queue[rear]=data;
 	return 1;
+	}
+	else
+		return 0;
 }
 
 
@@ -54,7 +111,7 @@ void heapup(){
 void heapdown(){
 	int parent=1,lchild,rchild;
 	mal_mem temp;
-	while(parent<heapend){
+	while(parent<heapend/2){
 		lchild=(parent)*2;
 		rchild=(parent)*2+1;
 		
@@ -78,11 +135,15 @@ void heapdown(){
 
 /*insert data to heap*/
 int enheap(mal_mem data){
-	if(heapend==MAXH)
-		return 0;
+	if(!is_fullH()){
 	heap[heapend++]=data;
 	heapup();
+	printf("enheap!\n");
 	return 1;
+	}
+	else
+		printf("failenheap!\n");
+		return 0;
 }
 
 /*delete data from heap*/

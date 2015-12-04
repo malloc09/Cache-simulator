@@ -3,15 +3,21 @@
 
 #include "cache.h"
 
-#define MAXQ 584
-#define MAXH 585 //not use 0
+#define MAXQ 1 
+#define MAXH 1 //not use 0
 
-
-extern int rear,front;
 extern mal_memp queue,heap;
-extern int heapend;
+extern int rear,front,heapend;
 
-void initDS();
+
+void initQ();
+void desQ();
+void initH();
+void desH();
+int is_fullQ();
+int is_fullH();
+int is_existQ(mal_mem data);
+int is_existH(mal_mem data);
 int enque(mal_mem data);
 int deque();
 int enheap(mal_mem data);
