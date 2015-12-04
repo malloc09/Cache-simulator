@@ -2,7 +2,7 @@
 #define __MAL__CACHE__
 
 #define MEMACC 1
-#define HDDACC 100000 
+#define STOACC 100000 
 
 
 typedef struct mal_mem{
