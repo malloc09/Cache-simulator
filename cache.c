@@ -3,7 +3,7 @@
 #include "cache.h"
 #include "ds.h"
 
-#define filename "input2.txt"
+#define filename "input.txt"
 
 double Time;
 int miss,total,stoacc;
@@ -111,6 +111,7 @@ int mem_access_LRU_WT(int no, char mode){
 		rcount++;
 		if(exist!=-1){
 			heap[exist].used=Time;
+			heapify(exist);
 		}
 		else{
 			miss++;
@@ -201,6 +202,10 @@ int SimWT_FIFO(){
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, (char*)&garbage, &garbage);
 		total++;
 		mem_access_FIFO_WT(pageno, mode);
+		/*for(int i=front;i<front+Qnum;i++)
+			printf("%d ",queue[i%MAXQ].page_num);
+		printf("\n");*/
+
 	}
 	fclose(fp);
 	printf("=====  WriteThrough FIFO  =====\n");
@@ -227,10 +232,12 @@ int SimWT_LRU(){
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, &garbage1, &garbage);
 		total++;
 		mem_access_LRU_WT(pageno, mode);
-	for(int i=0;i<heapend;i++)
-			printf("%d ",heap[i].page_num);
+		////
+		/*printf("%d\n", total);
+		for(int i=1;i<heapend;i++)
+			printf("[%d %.1lf]",heap[i].page_num, heap[i].used);
 		printf("\n");
-
+		*/
 	}
 	fclose(fp);
 	printf("=====  WriteThrough LRU  =====\n");
@@ -257,9 +264,9 @@ int SimWB_FIFO(){
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, (char*)&garbage, &garbage);
 		total++;
 		mem_access_FIFO_WB(pageno, mode);
-		for(int i=front;i<front+Qnum;i++)
+		/*for(int i=front;i<front+Qnum;i++)
 			printf("%d ",queue[i%MAXQ].page_num);
-		printf("\n");
+		printf("\n");*/
 
 	}
 	fclose(fp);
@@ -288,9 +295,9 @@ int SimWB_LRU(){
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, &garbage1, &garbage);
 		total++;
 		mem_access_LRU_WB(pageno, mode);
-		for(int i=0;i<heapend;i++)
+		/*for(int i=0;i<heapend;i++)
 			printf("%d %.2f ",heap[i].page_num,heap[i].used);
-		printf("\n");
+		printf("\n");*/
 	}
 	fclose(fp);
 	printf("=====  WriteBack LRU  =====\n");

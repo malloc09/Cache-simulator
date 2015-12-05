@@ -9,13 +9,6 @@ int heapend; //for heap first empty space
 mal_memp queue;
 mal_memp	heap;
 
-void printH(){
-	int i;
-	for(i=1; i<heapend; i++){
-		printf("%d %d\n", heap[i].page_num, heap[i].used);
-	}
-}
-
 void initQ(){
 	queue=(mal_memp)malloc(sizeof(mal_mem)*MAXQ);
 	rear=0;
@@ -107,6 +100,10 @@ void heapup(){
 	mal_mem temp;
 	parent=child/2;
 	while(parent>0){
+		/*for(int i=1; i<heapend; i++){
+			printf("[%d %.2lf]", heap[i].page_num, heap[i].used);
+		}
+		printf("\n");*/
 		if(heap[child].used<heap[parent].used){
 			temp=heap[child];
 			heap[child]=heap[parent];
@@ -116,6 +113,7 @@ void heapup(){
 		}
 		else break;
 	}
+	//printf("\n");
 }
 
 /*heap rebuilding after deletion*/
@@ -158,8 +156,30 @@ int enheap(mal_mem data){
 /*delete data from heap*/
 int deheap(){
 	if(heapend==1)
-		return 0;
+		return -1;
+	heap[heapend]=heap[1];
 	heap[1]=heap[--heapend];
 	heapdown();
-	return 1;
+	return heapend+1;
+}
+
+void heapify(int i){
+	int lchild = i*2;
+	int rchild = i*2+1;
+	int smallest;
+	mal_mem temp;
+
+	if(lchild <= heapend && heap[lchild].used < heap[i].used)
+		smallest = lchild;
+	else
+		smallest = i;
+	if(rchild <= heapend && heap[rchild].used < heap[smallest].used)
+		smallest = rchild;
+	if(smallest != i){
+		temp = heap[i];
+		heap[i] = heap[smallest];
+		heap[smallest] = temp;
+		heapify(smallest);
+	}
+
 }
