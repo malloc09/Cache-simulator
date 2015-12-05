@@ -12,36 +12,33 @@ int rcount,wcount;
 int mem_access_FIFO_WT(int no, char mode){
 	mal_mem data;
 	data.page_num=no;
-	data.used=Time;
-	if(mode=='W') data.dirty=1;
-	else data.dirty=0;
 
 	Time+=MEMACC;
 	int exist=is_existQ(data);
-	if(mode=='R'){
+	if(mode=='R'){ //read page
 		rcount++;
-		if(exist!=-1){
-			queue[exist].used=Time;
+		if(exist!=-1){ //hit
+			queue[exist].used=Time; 
 		}
-		else{
+		else{ //miss
 			miss++;
-			if(is_fullQ()) deque();
-			Time+=STOACC;
+			if(is_fullQ()) deque(); //if full deque
+			Time+=STOACC; //access time
 			stoacc++;
-			data.used=Time;
+			data.used=Time; 
 			enque(data);
 		}
 	}
-	else{
+	else{ //write
 		wcount++;
-		if(exist!=-1){
-			queue[exist].used=Time;
-			Time+=STOACC;
+		if(exist!=-1){//hit
+			queue[exist].used=Time; 
+			Time+=STOACC; //write storage
 			stoacc++;
 		}
-		else{
+		else{ //miss
 			miss++;
-			Time+=STOACC;
+			Time+=STOACC; //write storage
 			stoacc++;
 		}
 	}
@@ -49,46 +46,48 @@ int mem_access_FIFO_WT(int no, char mode){
 }
 
 int mem_access_FIFO_WB(int no, char mode){
- 	int deQ;
+	int deQ;
 	mal_mem data;
 	data.page_num = no;
 	Time += MEMACC;
 
 	int exist = is_existQ(data);
-	if(mode=='R'){
+	if(mode=='R'){//read
 		rcount++;
-		if(exist != -1)
+		if(exist != -1) //hit
 			queue[exist].used=Time;
-		else{
+		else{//miss
 			miss++;
-			if(is_fullQ())	deQ = deque();
-			if(queue[deQ].dirty == 1){
-				Time+=STOACC;
-				stoacc++;
+			if(is_fullQ()){ //if full deque
+				deQ = deque();
+				if(queue[deQ].dirty == 1){ //dirty -> storage update
+					Time+=STOACC;
+					stoacc++;
+				}
 			}
-			Time+=STOACC;
+			Time+=STOACC; //read page
 			stoacc++;
 			data.used = Time;
 			data.dirty = 0;
 			enque(data);
 		}
 	}
-	else{
+	else{//write
 		wcount++;
-		if(exist != -1){
+		if(exist != -1){ //hit
 			queue[exist].used=Time;
-			queue[exist].dirty=1;
+			queue[exist].dirty=1; //make dirty
 		}
-		else{
+		else{ //miss
 			miss++;
-			if(is_fullQ()){	
+			if(is_fullQ()){ //if full deque	
 				deQ = deque();
-				if(queue[deQ].dirty == 1){
+				if(queue[deQ].dirty == 1){ //dirty-> storage update
 					Time+=STOACC;
 					stoacc++;
 				}
 			}
-			Time+=STOACC;
+			Time+=STOACC; //read page
 			stoacc++;
 			data.used = Time;
 			data.dirty = 1;
@@ -98,40 +97,38 @@ int mem_access_FIFO_WB(int no, char mode){
 	return 0;
 }
 int mem_access_LRU_WT(int no, char mode){
-	//printH();
 	mal_mem data;
 	data.page_num=no;
 	if(mode=='W') data.dirty=1;
 	else data.dirty=0;
-	data.used=Time;  //init data
 
 	Time+=MEMACC;
 	int exist=is_existH(data);
-	if(mode=='R'){
+	if(mode=='R'){ //read
 		rcount++;
-		if(exist!=-1){
-			heap[exist].used=Time;
-			heapify(exist);
+		if(exist!=-1){ //hit
+			heap[exist].used=Time; 
+			heapify(exist); //heap rebuilding
 		}
-		else{
+		else{ //miss
 			miss++;
-			if(is_fullH()) deheap();
-			Time+=STOACC;
+			if(is_fullH()) deheap(); //if full deheap
+			Time+=STOACC; //read storage
 			stoacc++;
 			data.used=Time;
-			enheap(data);
+			enheap(data); 
 		}
 	}
-	else{
+	else{//write
 		wcount++;
-		if(exist!=-1){
+		if(exist!=-1){//hit
 			heap[exist].used=Time;
-			Time+=STOACC;
+			Time+=STOACC; //write stroage
 			stoacc++;
 		}
-		else{
+		else{//miss
 			miss++;
-			Time+=STOACC;
+			Time+=STOACC; //write storage
 			stoacc++;
 		}
 	}	return 0;
@@ -145,40 +142,42 @@ int mem_access_LRU_WB(int no, char mode){
 
 	Time+=MEMACC;
 	int exist=is_existH(data);
-	if(mode=='R'){
+	if(mode=='R'){ //read
 		rcount++;
-		if(exist != -1)
+		if(exist != -1)//hit
 			heap[exist].used=Time;
-		else{
+		else{//miss
 			miss++;
-			if(is_fullH())	deH = deheap();
-			if(heap[deH].dirty == 1){
-				Time+=STOACC;
-				stoacc++;
+			if(is_fullH())	{ //if full deheap
+				deH = deheap();
+				if(heap[deH].dirty == 1){//dirty->update
+					Time+=STOACC;
+					stoacc++;
+				}
 			}
-			Time+=STOACC;
+			Time+=STOACC;//read storage
 			stoacc++;
 			data.used = Time;
 			data.dirty = 0;
 			enheap(data);
 		}
 	}
-	else{
+	else{//write
 		wcount++;
-		if(exist != -1){
+		if(exist != -1){//hit
 			heap[exist].used=Time;
-			heap[exist].dirty=1;
+			heap[exist].dirty=1; //make dirty
 		}
-		else{
+		else{//miss
 			miss++;
-			if(is_fullH()){
+			if(is_fullH()){//if full deheap
 				deH = deheap();
-				if(heap[deH].dirty == 1){
+				if(heap[deH].dirty == 1){//dirty->update
 					Time+=STOACC;
 					stoacc++;
 				}
 			}
-			Time+=STOACC;
+			Time+=STOACC;//read storage
 			stoacc++;
 			data.used = Time;
 			data.dirty = 1;
@@ -199,13 +198,10 @@ int SimWT_FIFO(){
 	initQ();
 	FILE *fp = fopen(filename, "r");
 	while(!feof(fp)){
+		/*read line and access memory until end of file*/
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, (char*)&garbage, &garbage);
 		total++;
 		mem_access_FIFO_WT(pageno, mode);
-		/*for(int i=front;i<front+Qnum;i++)
-			printf("%d ",queue[i%MAXQ].page_num);
-		printf("\n");*/
-
 	}
 	fclose(fp);
 	printf("=====  WriteThrough FIFO  =====\n");
@@ -227,17 +223,15 @@ int SimWT_LRU(){
 	int garbage;
 	char garbage1;
 	initH();
+	int i;
 	FILE *fp = fopen(filename, "r");
 	while(!feof(fp)){
+		/*read line and access memory until end of file*/
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, &garbage1, &garbage);
 		total++;
 		mem_access_LRU_WT(pageno, mode);
 		////
-		/*printf("%d\n", total);
-		for(int i=1;i<heapend;i++)
-			printf("[%d %.1lf]",heap[i].page_num, heap[i].used);
-		printf("\n");
-		*/
+		 
 	}
 	fclose(fp);
 	printf("=====  WriteThrough LRU  =====\n");
@@ -261,12 +255,13 @@ int SimWB_FIFO(){
 	initQ();
 	FILE *fp = fopen(filename, "r");
 	while(!feof(fp)){
+		/*read line and access memory until end of file*/
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, (char*)&garbage, &garbage);
 		total++;
 		mem_access_FIFO_WB(pageno, mode);
 		/*for(int i=front;i<front+Qnum;i++)
-			printf("%d ",queue[i%MAXQ].page_num);
-		printf("\n");*/
+		  printf("%d %d ",queue[front].page_num,queue[front].used);
+		  printf("\n");*/
 
 	}
 	fclose(fp);
@@ -292,12 +287,13 @@ int SimWB_LRU(){
 	initH();
 	FILE *fp = fopen(filename, "r");
 	while(!feof(fp)){
+		/*read line and access memory until end of file*/
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, &garbage1, &garbage);
 		total++;
 		mem_access_LRU_WB(pageno, mode);
 		/*for(int i=0;i<heapend;i++)
-			printf("%d %.2f ",heap[i].page_num,heap[i].used);
-		printf("\n");*/
+		  printf("%d %.2f ",heap[i].page_num,heap[i].used);
+		  printf("\n");*/
 	}
 	fclose(fp);
 	printf("=====  WriteBack LRU  =====\n");

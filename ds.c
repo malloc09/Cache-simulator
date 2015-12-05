@@ -57,11 +57,12 @@ int enque(mal_mem data){
 
 /*deque data*/
 int deque(){
+	int res=front;
 	if(Qnum==0)	/* Q의 멤버수가 0일 때로 바꿈 */
 		return -1;
 	front=(front+1)%MAXQ;
 	Qnum--;
-	return (front-1)%MAXQ;
+	return res;
 }
 void initH(){
 	heap=(mal_memp)malloc(sizeof(mal_mem)*(MAXH+1));
@@ -157,10 +158,10 @@ int enheap(mal_mem data){
 int deheap(){
 	if(heapend==1)
 		return -1;
-	heap[heapend]=heap[1];
+	heap[0]=heap[1];
 	heap[1]=heap[--heapend];
 	heapdown();
-	return heapend+1;
+	return 0;
 }
 
 void heapify(int i){
@@ -169,11 +170,11 @@ void heapify(int i){
 	int smallest;
 	mal_mem temp;
 
-	if(lchild <= heapend && heap[lchild].used < heap[i].used)
+	if(lchild < heapend && heap[lchild].used < heap[i].used)
 		smallest = lchild;
 	else
 		smallest = i;
-	if(rchild <= heapend && heap[rchild].used < heap[smallest].used)
+	if(rchild < heapend && heap[rchild].used < heap[smallest].used)
 		smallest = rchild;
 	if(smallest != i){
 		temp = heap[i];

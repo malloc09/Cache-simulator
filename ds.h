@@ -3,8 +3,8 @@
 
 #include "cache.h"
 
-#define MAXQ 5
-#define MAXH 5 //not use 0
+#define MAXQ 580
+#define MAXH 580 //not use 0
 
 extern mal_memp queue,heap;
 extern int rear,front,heapend,Qnum;
