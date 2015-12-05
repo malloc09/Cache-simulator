@@ -3,13 +3,13 @@
 
 #include "cache.h"
 
-#define MAXQ 5050
-#define MAXH 5050 //not use 0
+#define MAXQ 2
+#define MAXH 2 //not use 0
 
 extern mal_memp queue,heap;
-extern int rear,front,heapend;
+extern int rear,front,heapend,Qnum;
 
-
+void printH();
 void initQ();
 void desQ();
 void initH();

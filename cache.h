@@ -8,7 +8,7 @@
 typedef struct mal_mem{
 	int page_num;
 	int dirty;
-	int used;
+	double used;
 }mal_mem;
 
 typedef mal_mem* mal_memp;

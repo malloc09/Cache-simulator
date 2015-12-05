@@ -9,6 +9,13 @@ int heapend; //for heap first empty space
 mal_memp queue;
 mal_memp	heap;
 
+void printH(){
+	int i;
+	for(i=1; i<heapend; i++){
+		printf("%d %d\n", heap[i].page_num, heap[i].used);
+	}
+}
+
 void initQ(){
 	queue=(mal_memp)malloc(sizeof(mal_mem)*MAXQ);
 	rear=0;
@@ -34,9 +41,9 @@ int is_existQ(mal_mem data){
 	int pageno=data.page_num;
 	int i;
 
-	for(i=0;i<Qnum;i++){
-		if(pageno==queue[i].page_num)
-			return i;
+	for(i=front;i<front+Qnum;i++){	/* front부터 rear까지 검색으로 바꿈 */
+		if(pageno==queue[i%MAXQ].page_num)
+			return i%MAXQ;
 	}
 	return -1;
 }
@@ -45,8 +52,8 @@ int is_existQ(mal_mem data){
 /*enque data*/
 int enque(mal_mem data){
 	if(!is_fullQ()){
+	queue[rear]=data;	/* rear에 데이터를 넣고 증가시키는걸로 바꿈 */
 	rear=(rear+1)%MAXQ;
-	queue[rear]=data;
 	Qnum++;
 	return 1;
 	}
@@ -57,11 +64,11 @@ int enque(mal_mem data){
 
 /*deque data*/
 int deque(){
-	if(front==rear)
-		return 0;
+	if(Qnum==0)	/* Q의 멤버수가 0일 때로 바꿈 */
+		return -1;
 	front=(front+1)%MAXQ;
 	Qnum--;
-	return 1;
+	return (front-1)%MAXQ;
 }
 void initH(){
 	heap=(mal_memp)malloc(sizeof(mal_mem)*(MAXH+1));
