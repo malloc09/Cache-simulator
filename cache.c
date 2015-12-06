@@ -195,9 +195,9 @@ int mem_access_FIFO_WR(int no, char mode){
 	mal_mem data;
 	data.page_num=no;
 
-	Time+=MEMACC;
 	int exist=is_existQ(data);
 	if(mode=='R'){ //read page
+		Time+=MEMACC;
 		rcount++;
 		if(exist!=-1){ //hit
 			queue[exist].used=Time;
@@ -225,9 +225,9 @@ int mem_access_LRU_WR(int no, char mode){
 	mal_mem data;
 	data.page_num=no;
 
-	Time+=MEMACC;
 	int exist=is_existH(data);
 	if(mode=='R'){ //read page
+		Time+=MEMACC;
 		rcount++;
 		if(exist!=-1){ //hit
 			heap[exist].used=Time;
@@ -274,7 +274,7 @@ int SimWT_FIFO(){
 	printf("TOTAL %d WRITE %d READ %d\n",total,wcount,rcount);
 	printf("STORAGE ACCESS : %d\n",stoacc);
 	printf("MISS %d HIT RATIO %.2f\n",miss,(total-miss)/(double)total);
-	printf("TIME : %.2lfms\n\n",Time/10000);
+	printf("TIME : %.2lfms\n\n",Time/1000000);
 	desQ();
 	return 0;
 }
@@ -304,7 +304,7 @@ int SimWT_LRU(){
 	printf("TOTAL %d WRITE %d READ %d\n",total,wcount,rcount);
 	printf("STORAGE ACCESS : %d\n",stoacc);
 	printf("MISS %d HIT RATIO %.2f\n",miss,(total-miss)/(double)total);
-	printf("TIME : %.2lfms\n\n",Time/10000);
+	printf("TIME : %.2lfms\n\n",Time/1000000);
 	desH();
 	return 0;
 }
@@ -335,7 +335,7 @@ int SimWB_FIFO(){
 	printf("TOTAL %d WRITE %d READ %d\n",total,wcount,rcount);
 	printf("STORAGE ACCESS : %d\n",stoacc);
 	printf("MISS %d HIT RATIO %.2f\n",miss,(total-miss)/(double)total);
-	printf("TIME : %.2lfms\n\n",Time/10000);
+	printf("TIME : %.2lfms\n\n",Time/1000000);
 	desQ();
 	return 0;
 }
@@ -366,7 +366,7 @@ int SimWB_LRU(){
 	printf("TOTAL %d WRITE %d READ %d\n",total,wcount,rcount);
 	printf("STORAGE ACCESS : %d\n",stoacc);
 	printf("MISS %d HIT RATIO %.2f\n",miss,(total-miss)/(double)total);
-	printf("TIME : %.2lfms\n\n",Time/10000);
+	printf("TIME : %.2lfms\n\n",Time/1000000);
 	desH();
 	return 0;
 }
@@ -392,7 +392,7 @@ int SimWR_FIFO(){
 	printf("TOTAL %d WRITE %d READ %d\n",total,wcount,rcount);
 	printf("STORAGE ACCESS : %d\n",stoacc);
 		printf("MISS IN READ %d HIT RATIO IN READ %.2f\n",miss,(rcount-miss)/(double)rcount);
-		printf("TIME : %.2lfms\n\n",Time/10000);
+		printf("TIME : %.2lfms\n\n",Time/1000000);
 	desQ();
 	return 0;
 }
@@ -418,7 +418,7 @@ int SimWR_LRU(){
 	printf("TOTAL %d WRITE %d READ %d\n",total,wcount,rcount);
 	printf("STORAGE ACCESS : %d\n",stoacc);
 	printf("MISS IN READ %d HIT RATIO IN READ %.2f\n",miss,(rcount-miss)/(double)rcount);
-	printf("TIME : %.2lfms\n\n",Time/10000);
+	printf("TIME : %.2lfms\n\n",Time/1000000);
 	desH();
 	return 0;
 }

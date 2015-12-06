@@ -1,8 +1,8 @@
 #ifndef __MAL__CACHE__
 #define __MAL__CACHE__
 
-#define MEMACC 1
-#define STOACC 100000 
+#define MEMACC 100
+#define STOACC 10000000 
 
 
 typedef struct mal_mem{
