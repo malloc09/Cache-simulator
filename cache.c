@@ -34,15 +34,13 @@ int mem_access_FIFO_WT(int no, char mode){
 		wcount++;
 		if(exist != -1){ //hit
 			queue[exist].used=Time;
+			Time+=STOACC;
+			stoacc++;
 		}
 		else{ //miss
 			miss++;
-			if(is_fullQ()){ //if full deque	
-				deque();
-			}
 			Time+=STOACC; //read page
 			stoacc++;
-			data.used = Time;
 		}
 	}
 
