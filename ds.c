@@ -40,9 +40,9 @@ int is_existQ(mal_mem data){
 	int pageno=data.page_num;
 	int i;
 
-	for(i=front;i<front+Qnum;i++){	/* front부터 rear까지 검색으로 바꿈 */
-		if(pageno==queue[i%MAXQ].page_num)
-			return i%MAXQ; //return index
+	for(i=front;i<front+Qnum;i=(i+1)%MAXQ){	/* front부터 rear까지 검색으로 바꿈 */
+		if(pageno==queue[i].page_num)
+			return i; //return index
 	}
 	return -1;
 }
