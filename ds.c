@@ -6,6 +6,7 @@
 int rear=0,front=0; //for q
 int Qnum=0;
 int heapend; //for heap first empty space
+int MAXQ=200,MAXH=200;
 mal_memp queue;
 mal_memp	heap;
 
@@ -39,8 +40,8 @@ int is_fullQ(){
 int is_existQ(mal_mem data){
 	int pageno=data.page_num;
 	int i;
-
-	for(i=front;i<front+Qnum;i=(i+1)%MAXQ){	/* front부터 rear까지 검색으로 바꿈 */
+	int count=0;
+	for(i=front;count<Qnum;i=(i+1)%MAXQ,count++){	/* front부터 rear까지 검색으로 바꿈 */
 		if(pageno==queue[i].page_num)
 			return i; //return index
 	}

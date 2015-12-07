@@ -15,33 +15,37 @@ int mem_access_FIFO_WT(int no, char mode){
 
 	Time+=MEMACC;
 	int exist=is_existQ(data);
-	if(mode=='R'){ //read page
+if(mode=='R'){//read
 		rcount++;
-		if(exist!=-1){ //hit
-			queue[exist].used=Time; 
-		}
-		else{ //miss
+		if(exist != -1) //hit
+			queue[exist].used=Time;
+		else{//miss
 			miss++;
-			if(is_fullQ()) deque(); //if full deque
-			Time+=STOACC; //access time
+			if(is_fullQ()){ //if full deque
+				deque();
+			}
+			Time+=STOACC; //read page
 			stoacc++;
-			data.used=Time; 
+			data.used = Time;
 			enque(data);
 		}
 	}
-	else{ //write
+	else{//write
 		wcount++;
-		if(exist!=-1){//hit
-			queue[exist].used=Time; 
-			Time+=STOACC; //write storage
-			stoacc++;
+		if(exist != -1){ //hit
+			queue[exist].used=Time;
 		}
 		else{ //miss
 			miss++;
-			Time+=STOACC; //write storage
+			if(is_fullQ()){ //if full deque	
+				 deque();
+			}
+			Time+=STOACC; //read page
 			stoacc++;
+			data.used = Time;
 		}
 	}
+
 	return 0;
 }
 
@@ -76,13 +80,14 @@ int mem_access_LRU_WT(int no, char mode){
 			heapify(exist);
 			Time+=STOACC; //write stroage
 			stoacc++;
+		
 		}
 		else{//miss
 			miss++;
 			Time+=STOACC; //write storage
 			stoacc++;
-		}
-	}	return 0;
+		}}
+		return 0;
 }
 
 int mem_access_FIFO_WB(int no, char mode){
@@ -262,12 +267,16 @@ int SimWT_FIFO(){
 	int pageno;
 	int garbage;
 	initQ();
+	int i;
 	FILE *fp = fopen(filename, "r");
 	while(!feof(fp)){
 		/*read line and access memory until end of file*/
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, (char*)&garbage, &garbage);
 		total++;
 		mem_access_FIFO_WT(pageno, mode);
+	//	for(i=front;i<front+Qnum;i=(i+1)%MAXQ)
+//		  printf("%d %.2f ",queue[i].page_num,queue[i].used);
+//		 printf("\n");
 	}
 	fclose(fp);
 	printf("=====  WriteThrough FIFO  =====\n");
@@ -296,7 +305,10 @@ int SimWT_LRU(){
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, &garbage1, &garbage);
 		total++;
 		mem_access_LRU_WT(pageno, mode);
-		////
+//		for(i=0;i<heapend;i++)
+//		  printf("%d %.2f ",heap[i].page_num,heap[i].used);
+//		  printf("\n");
+	
 		 
 	}
 	fclose(fp);
@@ -422,7 +434,15 @@ int SimWR_LRU(){
 	desH();
 	return 0;
 }
-int main(){
+int main(int argc,char* argv[]){
+	int max;
+	if(argc>1){
+		max=atoi(argv[1]);
+		if(max>0){
+			MAXQ=max;
+			MAXH=max;}
+	}
+	
 	SimWT_FIFO();
 	SimWT_LRU();
 	SimWB_FIFO();

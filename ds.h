@@ -3,12 +3,10 @@
 
 #include "cache.h"
 
-#define MAXQ 567
-#define MAXH 567 
 
 extern mal_memp queue,heap;
 extern int rear,front,heapend,Qnum;
-
+extern int MAXQ,MAXH;
 void initQ();
 void desQ();
 void initH();
