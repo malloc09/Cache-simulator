@@ -6,7 +6,7 @@
 int rear=0,front=0; //for q
 int Qnum=0;
 int heapend; //for heap first empty space
-int MAXQ=200,MAXH=200;
+int MAXQ=567,MAXH=567;
 mal_memp queue;
 mal_memp	heap;
 
@@ -29,11 +29,11 @@ void desQ(){
 
 /*check Q full*/
 int is_fullQ(){
- if(Qnum==MAXQ){
-	 return 1;
- }
- else
-	 return 0;
+	if(Qnum==MAXQ){
+		return 1;
+	}
+	else
+		return 0;
 }
 
 /*check existence of page*/
@@ -41,7 +41,7 @@ int is_existQ(mal_mem data){
 	int pageno=data.page_num;
 	int i;
 	int count=0;
-	for(i=front;count<Qnum;i=(i+1)%MAXQ,count++){	/* front부터 rear까지 검색으로 바꿈 */
+	for(i=front;count<Qnum;i=(i+1)%MAXQ,count++){	/* search from front to rear */
 		if(pageno==queue[i].page_num)
 			return i; //return index
 	}
@@ -52,10 +52,10 @@ int is_existQ(mal_mem data){
 /*enque data*/
 int enque(mal_mem data){
 	if(!is_fullQ()){
-	queue[rear]=data;	/* rear에 데이터를 넣고 증가시키는걸로 바꿈 */
-	rear=(rear+1)%MAXQ;
-	Qnum++;
-	return 1;
+		queue[rear]=data;	
+		rear=(rear+1)%MAXQ;
+		Qnum++;
+		return 1;
 	}
 	else
 		return 0;
@@ -65,7 +65,7 @@ int enque(mal_mem data){
 /*deque data*/
 int deque(){
 	int res=front;
-	if(Qnum==0)	/* Q의 멤버수가 0일 때로 바꿈 */
+	if(Qnum==0)	/* empty if qnum 0 */
 		return -1;
 	front=(front+1)%MAXQ;
 	Qnum--;
@@ -132,7 +132,7 @@ void heapdown(){
 	while(parent<heapend/2){ //from parent to child
 		lchild=(parent)*2;
 		rchild=(parent)*2+1;
-		
+
 		if(heap[lchild].used<heap[parent].used && lchild<heapend){
 			//compare with left-child and switch
 			temp=heap[lchild];
@@ -156,9 +156,9 @@ void heapdown(){
 /*insert data to heap*/
 int enheap(mal_mem data){
 	if(!is_fullH()){
-	heap[heapend++]=data; //insert in heapend position
-	heapup();
-	return 1;
+		heap[heapend++]=data; //insert in heapend position
+		heapup();
+		return 1;
 	}
 	else
 		return 0;

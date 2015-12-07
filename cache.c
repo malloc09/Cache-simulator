@@ -15,7 +15,7 @@ int mem_access_FIFO_WT(int no, char mode){
 
 	Time+=MEMACC;
 	int exist=is_existQ(data);
-if(mode=='R'){//read
+	if(mode=='R'){//read
 		rcount++;
 		if(exist != -1) //hit
 			queue[exist].used=Time;
@@ -38,7 +38,7 @@ if(mode=='R'){//read
 		else{ //miss
 			miss++;
 			if(is_fullQ()){ //if full deque	
-				 deque();
+				deque();
 			}
 			Time+=STOACC; //read page
 			stoacc++;
@@ -80,14 +80,14 @@ int mem_access_LRU_WT(int no, char mode){
 			heapify(exist);
 			Time+=STOACC; //write stroage
 			stoacc++;
-		
+
 		}
 		else{//miss
 			miss++;
 			Time+=STOACC; //write storage
 			stoacc++;
 		}}
-		return 0;
+	return 0;
 }
 
 int mem_access_FIFO_WB(int no, char mode){
@@ -267,16 +267,12 @@ int SimWT_FIFO(){
 	int pageno;
 	int garbage;
 	initQ();
-	int i;
 	FILE *fp = fopen(filename, "r");
 	while(!feof(fp)){
 		/*read line and access memory until end of file*/
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, (char*)&garbage, &garbage);
 		total++;
 		mem_access_FIFO_WT(pageno, mode);
-	//	for(i=front;i<front+Qnum;i=(i+1)%MAXQ)
-//		  printf("%d %.2f ",queue[i].page_num,queue[i].used);
-//		 printf("\n");
 	}
 	fclose(fp);
 	printf("=====  WriteThrough FIFO  =====\n");
@@ -298,18 +294,14 @@ int SimWT_LRU(){
 	int garbage;
 	char garbage1;
 	initH();
-	int i;
 	FILE *fp = fopen(filename, "r");
 	while(!feof(fp)){
 		/*read line and access memory until end of file*/
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, &garbage1, &garbage);
 		total++;
 		mem_access_LRU_WT(pageno, mode);
-//		for(i=0;i<heapend;i++)
-//		  printf("%d %.2f ",heap[i].page_num,heap[i].used);
-//		  printf("\n");
-	
-		 
+
+
 	}
 	fclose(fp);
 	printf("=====  WriteThrough LRU  =====\n");
@@ -337,9 +329,6 @@ int SimWB_FIFO(){
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, (char*)&garbage, &garbage);
 		total++;
 		mem_access_FIFO_WB(pageno, mode);
-		/*for(int i=front;i<front+Qnum;i++)
-		  printf("%d %d ",queue[front].page_num,queue[front].used);
-		  printf("\n");*/
 
 	}
 	fclose(fp);
@@ -369,9 +358,6 @@ int SimWB_LRU(){
 		fscanf(fp, "%c %d %c %d\n", &mode, &pageno, &garbage1, &garbage);
 		total++;
 		mem_access_LRU_WB(pageno, mode);
-		/*for(int i=0;i<heapend;i++)
-		  printf("%d %.2f ",heap[i].page_num,heap[i].used);
-		  printf("\n");*/
 	}
 	fclose(fp);
 	printf("=====  WriteBack LRU  =====\n");
@@ -403,8 +389,8 @@ int SimWR_FIFO(){
 	printf("=====  WriteAround FIFO  =====\n");
 	printf("TOTAL %d WRITE %d READ %d\n",total,wcount,rcount);
 	printf("STORAGE ACCESS : %d\n",stoacc);
-		printf("MISS IN READ %d HIT RATIO IN READ %.2f\n",miss,(rcount-miss)/(double)rcount);
-		printf("TIME : %.2lfms\n\n",Time/1000000);
+	printf("MISS IN READ %d HIT RATIO IN READ %.2f\n",miss,(rcount-miss)/(double)rcount);
+	printf("TIME : %.2lfms\n\n",Time/1000000);
 	desQ();
 	return 0;
 }
@@ -442,7 +428,7 @@ int main(int argc,char* argv[]){
 			MAXQ=max;
 			MAXH=max;}
 	}
-	
+
 	SimWT_FIFO();
 	SimWT_LRU();
 	SimWB_FIFO();
